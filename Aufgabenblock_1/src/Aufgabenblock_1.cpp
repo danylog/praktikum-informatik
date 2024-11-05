@@ -2,8 +2,6 @@
 // Name        : Aufgabenblock_1.cpp
 // Author      : Danylo Galytskyy
 // Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
 //============================================================================
 
 #include <iostream>
