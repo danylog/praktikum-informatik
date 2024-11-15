@@ -4,14 +4,33 @@
 // Version     :
 //============================================================================
 
-//#include "Fahrzeug.h"
-//
-//
-//
-//int main() {
-//    Fahrzeug f1;
-//    Fahrzeug f2("Schiff");
-//    Fahrzeug f3("Fahrrad");
-//
-//    return 0;
-//}
+#include "Fahrzeug.h"
+
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+
+void vKopf(){
+	cout << setw(0) << "ID" << setw(7) << "Name" << setw(25) << "MaxGeschwindigkeit" << setw(16) << "Gesamtstrecke" << endl << "----------------------------------------------------"<<endl;
+}
+
+int main() {
+    Fahrzeug f1;
+    Fahrzeug f2("Schiff", 20);
+    Fahrzeug f3("Fahrrad", 10);
+
+
+    vKopf();
+    f1.vAusgeben();
+    std::cout << std::endl;
+    f2.vAusgeben();
+    std::cout << std::endl;
+    f3.vAusgeben();
+    std::cout << std::endl;
+
+    return 0;
+}
+
+
