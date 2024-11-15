@@ -14,6 +14,11 @@ Fahrzeug::Fahrzeug(const string& name) : p_sName(name), p_iID(++p_iMaxID) {
     cout << "Fahrzeug " << p_sName << " erstellt mit ID " << p_iID << endl;
 }
 
+Fahrzeug::Fahrzeug(const std::string& name, const double maxGeschwindigkeit)
+    : p_sName(name), p_iID(++p_iMaxID), p_dMaxGeschwindigkeit((maxGeschwindigkeit > 0) ? maxGeschwindigkeit : 0) {
+
+}
+
 Fahrzeug::~Fahrzeug() {
     cout << "Fahrzeug mit Name: " << p_sName << " und ID: " << p_iID << " geloescht" << endl;
 }
