@@ -7,6 +7,8 @@ using namespace std;
 
 int Fahrzeug::p_iMaxID = 0;
 
+extern double dGlobaleZeit;
+
 Fahrzeug::Fahrzeug() : p_sName(""), p_iID(++p_iMaxID), p_dMaxGeschwindigkeit(0.0) {
     cout << "Default Fahrzeug erstellt mit ID " << p_iID << endl;
 }
@@ -28,7 +30,6 @@ cout << setw(4) << p_iID << " "
 		<< setw(9) << setiosflags(std::ios::left)<< p_sName << resetiosflags(std::ios::left)<< " "
 		<< setw(19)  << setiosflags(std::ios::fixed) << setprecision(2) << p_dMaxGeschwindigkeit << " "
 		<< setw(16) << p_dGesamtStrecke;
-
 }
 
 

@@ -11,6 +11,7 @@
 
 using namespace std;
 
+double dGlobaleZeit = 0.0;
 
 void vKopf(){
 	cout << setw(0) << "ID" << setw(7) << "Name" << setw(25) << "MaxGeschwindigkeit" << setw(16) << "Gesamtstrecke" << endl << "----------------------------------------------------"<<endl;

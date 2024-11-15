@@ -13,6 +13,7 @@ public:
     void vAusgeben();
     void vKopf();
 
+
 private:
     std::string p_sName;
     const int p_iID;
