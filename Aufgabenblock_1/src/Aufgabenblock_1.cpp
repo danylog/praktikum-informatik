@@ -5,6 +5,8 @@
 //============================================================================
 
 #include "Fahrzeug.h"
+#include "Fahrrad.h"
+#include "PKW.h"
 
 #include <iostream>
 #include <iomanip>
@@ -22,8 +24,12 @@ int main() {
     Fahrzeug f2("Schiff", 20);
     Fahrzeug f3("Fahrrad", 10);
 
+    PKW pkw("audi", 200);
+
 
     vKopf();
+    pkw.vAusgeben();
+    std::cout << std::endl;
     f1.vAusgeben();
     std::cout << std::endl;
     f2.vAusgeben();

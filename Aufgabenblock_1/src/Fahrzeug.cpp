@@ -1,4 +1,6 @@
 #include "Fahrzeug.h"
+#include "PKW.h"
+#include "Fahrrad.h"
 
 #include <iostream>
 #include <iomanip>
