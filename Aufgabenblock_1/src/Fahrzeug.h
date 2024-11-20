@@ -12,6 +12,7 @@ public:
 
    virtual void vAusgeben();
    virtual void vSimulieren();
+   virtual double dSpeed();
    virtual double dTanken( double dMenge = std::numeric_limits<double>::infinity());
 
 

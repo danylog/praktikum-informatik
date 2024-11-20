@@ -18,7 +18,7 @@ using namespace std;
 double dGlobaleZeit = 0.0;
 
 void vKopf(){
-	cout << setw(0) << "ID" << setw(7) << "Name" << setw(25) << "MaxGeschwindigkeit" << setw(16) << "Gesamtstrecke" << setw(13) << "Verbrauch" << setw(12) << "Tankinhalt" << setw(16) << "Tankvolumen" << endl << "------------------------------------------------------------------------------------------"<<endl;
+	cout << setw(0) << "ID" << setw(7) << "Name" << setw(25) << "MaxGeschwindigkeit" << setw(16) << "Geschwindigkeit" << setw(16) << "Gesamtstrecke" << setw(13) << "Verbrauch" << setw(12) << "Tankinhalt" << setw(16) << "Tankvolumen" << endl << "------------------------------------------------------------------------------------------"<<endl;
 }
 
 
@@ -27,7 +27,7 @@ void vAufgabe1a(){
 
 	 vecFahrzeuge.push_back(make_unique<Fahrzeug>("fahrzeug1", 30.0));
 	 vecFahrzeuge.push_back(make_unique<PKW>("audi", 240.0, 8.0));
-	 vecFahrzeuge.push_back(make_unique<Fahrrad>("fahrrad1", 45.0));
+	 vecFahrzeuge.push_back(make_unique<Fahrrad>("fahrrad1", 14.0));
 	vKopf();
 
     const double dZeittakt = 0.5;

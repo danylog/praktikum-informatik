@@ -31,6 +31,7 @@ void Fahrzeug::vAusgeben(){
 cout << setw(4) << p_iID << " "
 		<< setw(9) << setiosflags(std::ios::left)<< p_sName << resetiosflags(std::ios::left)<< " "
 		<< setw(19)  << setiosflags(std::ios::fixed) << setprecision(2) << p_dMaxGeschwindigkeit << " "
+		<< setprecision(2) << dSpeed() << " "
 		<< setw(16) << p_dGesamtStrecke;
 }
 
@@ -42,10 +43,13 @@ double Fahrzeug::dTanken(double menge) {
 void Fahrzeug::vSimulieren() {
     if (p_dZeit < dGlobaleZeit) {
         double dZeitschritt = dGlobaleZeit - p_dZeit;
-        double dGefahreneStrecke = p_dMaxGeschwindigkeit * dZeitschritt;
+        double dGefahreneStrecke = dSpeed() * dZeitschritt;
 
         p_dGesamtStrecke += dGefahreneStrecke;
         p_dGesamtZeit += dZeitschritt;
         p_dZeit = dGlobaleZeit;
     }
+}
+double Fahrzeug::dSpeed(){
+	return p_dMaxGeschwindigkeit;
 }
