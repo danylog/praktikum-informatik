@@ -9,7 +9,7 @@ using namespace std;
 
 int Fahrzeug::p_iMaxID = 0;
 
-extern double dGlobaleZeit;
+//double dGlobaleZeit = 0.0;
 
 Fahrzeug::Fahrzeug() : p_sName(""), p_iID(++p_iMaxID), p_dMaxGeschwindigkeit(0.0) {
     cout << "Default Fahrzeug erstellt mit ID " << p_iID << endl;
@@ -35,3 +35,17 @@ cout << setw(4) << p_iID << " "
 }
 
 
+double Fahrzeug::dTanken(double menge) {
+    return 0.0;
+}
+
+void Fahrzeug::vSimulieren() {
+    if (p_dZeit < dGlobaleZeit) {
+        double dZeitschritt = dGlobaleZeit - p_dZeit;
+        double dGefahreneStrecke = p_dMaxGeschwindigkeit * dZeitschritt;
+
+        p_dGesamtStrecke += dGefahreneStrecke;
+        p_dGesamtZeit += dZeitschritt;
+        p_dZeit = dGlobaleZeit;
+    }
+}

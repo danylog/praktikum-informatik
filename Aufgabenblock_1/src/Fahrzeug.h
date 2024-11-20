@@ -2,7 +2,7 @@
 #define FAHRZEUG_H
 
 #include <string>
-
+extern double dGlobaleZeit;
 class Fahrzeug {
 public:
     Fahrzeug();
@@ -11,18 +11,22 @@ public:
     virtual ~Fahrzeug();
 
    virtual void vAusgeben();
+   virtual void vSimulieren();
+   virtual double dTanken( double dMenge = std::numeric_limits<double>::infinity());
 
-protected:
-    std::string p_sName;
-    const double p_dMaxGeschwindigkeit;
-   const double p_dGesamtStrecke =0.0;
 
 private:
-
     const int p_iID;
     static int p_iMaxID;
 
 // //   const double p_dGesamtZeit;
+protected:
+    std::string p_sName;
+    const double p_dMaxGeschwindigkeit;
+    double p_dGesamtStrecke = 0.0;
+    double p_dGesamtZeit = 0.0;
+    double p_dZeit = 0.0;
+
 
 };
 
