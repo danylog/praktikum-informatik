@@ -16,7 +16,7 @@ void PKW::vAusgeben() {
     std::cout << std::fixed << std::setprecision(2)
               << std::setw(12) << p_dVerbrauch << " "
               << std::setw(12) << p_dTankinhalt << " "
-              << std::setw(12) << p_dTankvolumen << std::endl;
+              << std::setw(12) << p_dTankvolumen;
 }
 
 

@@ -14,7 +14,7 @@ public:
    virtual void vSimulieren();
    virtual double dSpeed();
    virtual double dTanken( double dMenge = std::numeric_limits<double>::infinity());
-
+   const std::string& sName() const { return p_sName; }
 
 private:
     const int p_iID;
