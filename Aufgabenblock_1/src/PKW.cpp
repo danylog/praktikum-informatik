@@ -1,5 +1,9 @@
 #include "PKW.h"
 
+#include <iostream>
+
+using namespace std;
+
 PKW::PKW(const std::string& name, double maxGeschwindigkeit, double verbrauch, double tankvolumen):
 Fahrzeug(name, maxGeschwindigkeit),
 		p_dVerbrauch(verbrauch),
@@ -11,8 +15,8 @@ Fahrzeug(name, maxGeschwindigkeit),
 
 }
 
-void PKW::vAusgeben() {
-    Fahrzeug::vAusgeben();
+void PKW::vAusgeben(ostream& os) {
+    Fahrzeug::vAusgeben(os);
     std::cout << std::fixed << std::setprecision(2)
               << std::setw(12) << p_dVerbrauch << " "
               << std::setw(12) << p_dTankinhalt << " "

@@ -22,29 +22,29 @@ void vKopf(){
 }
 
 
-void vAufgabe1a(){
-	vector<unique_ptr<Fahrzeug>> vecFahrzeuge;
-
-	 vecFahrzeuge.push_back(make_unique<Fahrzeug>("fahrzeug1", 30.0));
-	 vecFahrzeuge.push_back(make_unique<PKW>("audi", 240.0, 8.0));
-	 vecFahrzeuge.push_back(make_unique<Fahrrad>("fahrrad1", 14.0));
-	vKopf();
-
-    const double dZeittakt = 0.5;
-    const double dSimulationEnde = 5.0;
-
-    while (dGlobaleZeit < dSimulationEnde) {
-        dGlobaleZeit += dZeittakt;
-
-        for (auto& fahrzeug : vecFahrzeuge) {
-            fahrzeug->vSimulieren();
-            fahrzeug->vAusgeben();
-            cout << endl;
-        }
-
-        cout << "----------------------------------------------------------------------" << endl;
-    }
-}
+//void vAufgabe1a(){
+//	vector<unique_ptr<Fahrzeug>> vecFahrzeuge;
+//
+//	 vecFahrzeuge.push_back(make_unique<Fahrzeug>("fahrzeug1", 30.0));
+//	 vecFahrzeuge.push_back(make_unique<PKW>("audi", 240.0, 8.0));
+//	 vecFahrzeuge.push_back(make_unique<Fahrrad>("fahrrad1", 14.0));
+//	vKopf();
+//
+//    const double dZeittakt = 0.5;
+//    const double dSimulationEnde = 5.0;
+//
+//    while (dGlobaleZeit < dSimulationEnde) {
+//        dGlobaleZeit += dZeittakt;
+//
+//        for (auto& fahrzeug : vecFahrzeuge) {
+//            fahrzeug->vSimulieren();
+//            fahrzeug->vAusgeben();
+//            cout << endl;
+//        }
+//
+//        cout << "----------------------------------------------------------------------" << endl;
+//    }
+//}
 
 void vAufgabe2(){
 	/*Fahrzeug ist eine Basisklasse, und die Funktionalität für spezialisierte Fahrzeuge wie PKW oder Fahrrad wird in den abgeleiteten Klassen implementiert.
@@ -87,7 +87,7 @@ void vAufgabe2(){
 
         for (auto& fahrzeug : vecFahrzeuge) {
             fahrzeug->vSimulieren();
-            fahrzeug->vAusgeben();
+            cout << *fahrzeug;
             if(dGlobaleZeit == 3.0){
                 if (auto pkw = dynamic_cast<PKW*>(fahrzeug.get())) {
                     double getankt = pkw->dTanken();

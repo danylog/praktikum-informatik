@@ -27,8 +27,8 @@ Fahrzeug::~Fahrzeug() {
     cout << "Fahrzeug mit Name: " << p_sName << " und ID: " << p_iID << " geloescht" << endl;
 }
 
-void Fahrzeug::vAusgeben(){
-cout << setw(4) << p_iID << " "
+void Fahrzeug::vAusgeben(ostream& os){
+os << setw(4) << p_iID << " "
 		<< setw(9) << setiosflags(std::ios::left)<< p_sName << resetiosflags(std::ios::left)<< " "
 		<< setw(19)  << setiosflags(std::ios::fixed) << setprecision(2) << p_dMaxGeschwindigkeit << " "
 		<< setprecision(2) << dSpeed() << " "
@@ -52,4 +52,9 @@ void Fahrzeug::vSimulieren() {
 }
 double Fahrzeug::dSpeed(){
 	return p_dMaxGeschwindigkeit;
+}
+
+ostream& operator<<(ostream& os, Fahrzeug& f) {
+    f.vAusgeben(os);
+    return os;
 }

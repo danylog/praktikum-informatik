@@ -10,7 +10,7 @@ public:
     Fahrzeug(const std::string& name, const double maxGeschwindigkeit);
     virtual ~Fahrzeug();
 
-   virtual void vAusgeben();
+   virtual void vAusgeben(std::ostream& os);
    virtual void vSimulieren();
    virtual double dSpeed();
    virtual double dTanken( double dMenge = std::numeric_limits<double>::infinity());
@@ -28,6 +28,7 @@ protected:
     double p_dGesamtZeit = 0.0;
     double p_dZeit = 0.0;
 
+friend std::ostream& operator<<(std::ostream& os, Fahrzeug& f);
 
 };
 

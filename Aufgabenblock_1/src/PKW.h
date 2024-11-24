@@ -13,7 +13,7 @@ public:
 	        double tankvolumen = 55.0);
 
 	    // Overriding the vAusgeben function
-	    virtual void vAusgeben() override;
+	    virtual void vAusgeben(std::ostream& os) override;
 	    virtual double dTanken(double dMenge = std::numeric_limits<double>::infinity()) override;
 	    virtual void vSimulieren() override;
 	    virtual double dSpeed() override;
