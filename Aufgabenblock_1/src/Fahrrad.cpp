@@ -21,7 +21,7 @@ void Fahrrad::vSimulieren() {
 double Fahrrad::dGeschwindigkeit(){
 	const int iGefahren = p_dGesamtStrecke/20;
 	//	std::cout << pow(0.9, iGefahren);
-	if(iGefahren >0){
+	if(iGefahren > 0){
 		return p_dMaxGeschwindigkeit*(pow(0.9, iGefahren)) < 12 ? 12 : p_dMaxGeschwindigkeit*(pow(0.9, iGefahren));
 	}else{
 		return p_dMaxGeschwindigkeit;

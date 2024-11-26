@@ -23,7 +23,7 @@ double dGlobaleZeit = 0.0;
 //	 vecFahrzeuge.push_back(make_unique<Fahrzeug>("fahrzeug1", 30.0));
 //	 vecFahrzeuge.push_back(make_unique<PKW>("audi", 240.0, 8.0));
 //	 vecFahrzeuge.push_back(make_unique<Fahrrad>("fahrrad1", 14.0));
-//	vKopf();
+//	Fahrzeug::vKopf();
 //
 //    const double dZeittakt = 0.5;
 //    const double dSimulationEnde = 5.0;
@@ -90,14 +90,8 @@ void vAufgabe2(){
                 }
             }
             std::cout << std::endl;
-
         }
-
-
     }
-
-
-
 }
 
 
@@ -118,10 +112,13 @@ void vAufgabe3() {
               << ", ID = " << fahrzeug2.iID() << std::endl;
 }
 
+
+
+
 int main() {
 	vAufgabe2();
 	//vAufgabe1a();
-	vAufgabe3();
+	//vAufgabe3();
 return 0;
 }
 
