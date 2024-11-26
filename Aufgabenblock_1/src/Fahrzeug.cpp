@@ -5,18 +5,18 @@
 #include <iostream>
 #include <iomanip>
 
-using namespace std;
+//using namespace std;
 
 int Fahrzeug::p_iMaxID = 0;
 
 //double dGlobaleZeit = 0.0;
 
 Fahrzeug::Fahrzeug() : p_iID(++p_iMaxID), p_sName(""), p_dMaxGeschwindigkeit(0.0) {			//CONSTRUCTORS
-    cout << "Default Fahrzeug erstellt mit ID " << p_iID << endl;
+    std::cout << "Default Fahrzeug erstellt mit ID " << p_iID << std::endl;
 }
 
-Fahrzeug::Fahrzeug(const string& name) :  p_iID(++p_iMaxID), p_sName(name), p_dMaxGeschwindigkeit(0.0) {
-    cout << "Fahrzeug " << p_sName << " erstellt mit ID " << p_iID << endl;
+Fahrzeug::Fahrzeug(const std::string& name) :  p_iID(++p_iMaxID), p_sName(name), p_dMaxGeschwindigkeit(0.0) {
+    std::cout << "Fahrzeug " << p_sName << " erstellt mit ID " << p_iID << std::endl;
 }
 
 Fahrzeug::Fahrzeug(const std::string& name, const double maxGeschwindigkeit):  p_iID(++p_iMaxID),p_sName(name), p_dMaxGeschwindigkeit((maxGeschwindigkeit > 0) ? maxGeschwindigkeit : 0) {
@@ -24,15 +24,15 @@ Fahrzeug::Fahrzeug(const std::string& name, const double maxGeschwindigkeit):  p
 }
 
 Fahrzeug::~Fahrzeug() {
-    cout << "Fahrzeug mit Name: " << p_sName << " und ID: " << p_iID << " geloescht" << endl;
+    std::cout << "Fahrzeug mit Name: " << p_sName << " und ID: " << p_iID << " geloescht" << std::endl;
 }
 
-void Fahrzeug::vAusgeben(ostream& os){																	//FUNKTIONEN
-os << setw(4) << p_iID << " "
-		<< setw(9) << setiosflags(std::ios::left)<< p_sName << resetiosflags(std::ios::left)<< " "
-		<< setw(19)  << setiosflags(std::ios::fixed) << setprecision(2) << p_dMaxGeschwindigkeit << " "
-		<< setw(15) << setprecision(2) << dGeschwindigkeit() << " "
-		<< setw(14) << p_dGesamtStrecke;
+void Fahrzeug::vAusgeben(std::ostream& os){																	//FUNKTIONEN
+os << std::setw(4) << p_iID << " "
+		<< std::setw(9) << std::setiosflags(std::ios::left)<< p_sName << std::resetiosflags(std::ios::left)<< " "
+		<< std::setw(19)  << std::setiosflags(std::ios::fixed) << std::setprecision(2) << p_dMaxGeschwindigkeit << " "
+		<< std::setw(15) << std::setprecision(2) << dGeschwindigkeit() << " "
+		<< std::setw(14) << p_dGesamtStrecke;
 }
 
 
@@ -51,7 +51,7 @@ void Fahrzeug::vSimulieren() {
     }
 }
 
-ostream& operator<<(ostream& os, Fahrzeug& f) { //'<<' operator (ueberladet)
+std::ostream& operator<<(std::ostream& os, Fahrzeug& f) { //'<<' operator (ueberladet)
     f.vAusgeben(os);
     return os;
 }
