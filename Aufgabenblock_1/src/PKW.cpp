@@ -18,7 +18,7 @@ Fahrzeug(name, maxGeschwindigkeit),
 void PKW::vAusgeben(ostream& os) {
     Fahrzeug::vAusgeben(os);
     std::cout << std::fixed << std::setprecision(2)
-              << std::setw(12) << p_dVerbrauch << " "
+              << std::setw(10) << p_dVerbrauch << " "
               << std::setw(12) << p_dTankinhalt << " "
               << std::setw(12) << p_dTankvolumen;
 }
@@ -38,7 +38,7 @@ double PKW::dTanken(double menge){
     return dGetankt;
 }
 
-double PKW::dSpeed(){
+double PKW::dGeschwindigkeit(){
     return (p_dTankinhalt > 0) ? p_dMaxGeschwindigkeit : 0; // Return speed based on tank state
 }
 
@@ -47,7 +47,7 @@ void PKW::vSimulieren() {
         double dZeitschritt = dGlobaleZeit - p_dZeit;
 
         if (dZeitschritt > 0.0) {
-            double dFahrbareStrecke = dSpeed() * dZeitschritt;
+            double dFahrbareStrecke = dGeschwindigkeit() * dZeitschritt;
             double dMaxStreckeMitTank = (p_dTankinhalt / p_dVerbrauch) * 100.0;
 
             double dTatsaechlicheStrecke = std::min(dFahrbareStrecke, dMaxStreckeMitTank);

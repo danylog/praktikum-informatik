@@ -16,7 +16,7 @@ public:
 	    virtual void vAusgeben(std::ostream& os) override;
 	    virtual double dTanken(double dMenge = std::numeric_limits<double>::infinity()) override;
 	    virtual void vSimulieren() override;
-	    virtual double dSpeed() override;
+	    virtual double dGeschwindigkeit() override;
 private:
     const double p_dVerbrauch;
     const double p_dTankvolumen;

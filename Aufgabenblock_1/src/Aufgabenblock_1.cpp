@@ -13,13 +13,8 @@
 #include <memory>
 #include <vector>
 
-using namespace std;
-
 double dGlobaleZeit = 0.0;
 
-void vKopf(){
-	cout << setw(0) << "ID" << setw(7) << "Name" << setw(25) << "MaxGeschwindigkeit" << setw(16) << "Geschwindigkeit" << setw(16) << "Gesamtstrecke" << setw(13) << "Verbrauch" << setw(12) << "Tankinhalt" << setw(16) << "Tankvolumen" << endl << "------------------------------------------------------------------------------------------"<<endl;
-}
 
 
 //void vAufgabe1a(){
@@ -50,12 +45,12 @@ void vAufgabe2(){
 	/*Fahrzeug ist eine Basisklasse, und die Funktionalität für spezialisierte Fahrzeuge wie PKW oder Fahrrad wird in den abgeleiteten Klassen implementiert.
 	 Ein Fahrzeug-Objekt hätte keine spezifischen Funktionen oder Zustände von PKW oder Fahrrad, daher wäre es unflexibel und unbrauchbar für die Simulation. */
 	int pkws, fahrraeder;
-	cout << "Anzahl der PKWs: ";
-	cin >> pkws;
-	cout << "Anzahl der Fahrraeder: ";
-	cin >> fahrraeder;
+	std::cout << "Anzahl der PKWs: ";
+	std::cin >> pkws;
+	std::cout << "Anzahl der Fahrraeder: ";
+	std::cin >> fahrraeder;
 
-	cout << pkws << " " << fahrraeder << endl;
+	std::cout << pkws << " " << fahrraeder << std::endl;
 
 	std::vector<std::unique_ptr<Fahrzeug>> vecFahrzeuge;
 
@@ -63,38 +58,38 @@ void vAufgabe2(){
 	const uint8_t verbrauch = 4;
 
 	for(int i = 1; i <= pkws; i++){
-		string name = "pkw" + to_string(i);
+		std::string name = "pkw" + std::to_string(i);
 		double maxGeschwindigkeit = 150 +i*10;
-		vecFahrzeuge.push_back(make_unique<PKW>(name, maxGeschwindigkeit, verbrauch));
+		vecFahrzeuge.push_back(std::make_unique<PKW>(name, maxGeschwindigkeit, verbrauch));
 	}
 	for(int i = 1; i <= fahrraeder; i++){
-		string name = "fahrrad" + to_string(i);
+		std::string name = "fahrrad" + std::to_string(i);
 		double maxGeschwindigkeit = 15 +i*10;
-		vecFahrzeuge.push_back(make_unique<Fahrrad>(name, maxGeschwindigkeit));
+		vecFahrzeuge.push_back(std::make_unique<Fahrrad>(name, maxGeschwindigkeit));
 	}
 
     const double dZeittakt = 0.5;
     const double dSimulationEnde = 5.0;
 
-    vKopf();
+    Fahrzeug::vKopf();
 
     while (dGlobaleZeit < dSimulationEnde) {
         dGlobaleZeit += dZeittakt;
-        	cout << "Zeittakt " << dGlobaleZeit << " von " << dSimulationEnde << endl;
+        std::cout << "Zeittakt " << dGlobaleZeit << " von " << dSimulationEnde << std::endl;
 
 
 
 
         for (auto& fahrzeug : vecFahrzeuge) {
             fahrzeug->vSimulieren();
-            cout << *fahrzeug;
+            std::cout << *fahrzeug;
             if(dGlobaleZeit == 3.0){
                 if (auto pkw = dynamic_cast<PKW*>(fahrzeug.get())) {
                     double getankt = pkw->dTanken();
-                    cout << endl << "PKW " << pkw->sName() << " hat " << getankt << " Liter getankt.";
+                    std::cout << std::endl << "PKW " << pkw->sName() << " hat " << getankt << " Liter getankt.";
                 }
             }
-            cout << endl;
+            std::cout << std::endl;
 
         }
 
@@ -106,9 +101,27 @@ void vAufgabe2(){
 }
 
 
+void vAufgabe3() {
+    Fahrzeug fahrzeug1("Fahrzeug1", 120.0);
+    std::cout << "Fahrzeug " << fahrzeug1.sName()
+              << ", MaxGeschwindigkeit = " << fahrzeug1.dMaxGeschwindigkeit()
+              << ", ID = " << fahrzeug1.iID() << std::endl;
+
+    Fahrzeug fahrzeug2("Fahrzeug2", 100.0);
+    std::cout << "Fahrzeug " << fahrzeug2.sName()
+              << ", MaxGeschwindigkeit = " << fahrzeug2.dMaxGeschwindigkeit()
+              << ", ID = " << fahrzeug2.iID() << std::endl;
+
+    fahrzeug2 = fahrzeug1;
+    std::cout << "Nach Zuweisung: Fahrzeug " << fahrzeug2.sName()
+              << ", MaxGeschwindigkeit = " << fahrzeug2.dMaxGeschwindigkeit()
+              << ", ID = " << fahrzeug2.iID() << std::endl;
+}
+
 int main() {
 	vAufgabe2();
 	//vAufgabe1a();
+	vAufgabe3();
 return 0;
 }
 
