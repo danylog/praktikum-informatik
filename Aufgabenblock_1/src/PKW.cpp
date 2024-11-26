@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-//using namespace std;
 
 PKW::PKW(const std::string& name, double maxGeschwindigkeit, double verbrauch, double tankvolumen):
 Fahrzeug(name, maxGeschwindigkeit),
@@ -27,6 +26,7 @@ void PKW::vAusgeben(std::ostream& os) {
 
 double PKW::dTanken(double menge){
 	double dGetankt = 0.0;
+	if(menge < 0.0) return 0.0;
     if (menge == std::numeric_limits<double>::infinity()) {
         dGetankt = p_dTankvolumen - p_dTankinhalt;
         p_dTankinhalt = p_dTankvolumen;

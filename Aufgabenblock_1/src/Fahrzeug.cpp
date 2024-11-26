@@ -5,7 +5,6 @@
 #include <iostream>
 #include <iomanip>
 
-//using namespace std;
 
 int Fahrzeug::p_iMaxID = 0;
 
