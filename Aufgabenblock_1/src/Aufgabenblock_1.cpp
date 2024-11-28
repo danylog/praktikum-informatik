@@ -19,7 +19,6 @@ double dGlobaleZeit = 0.0;
 
 //void vAufgabe1a(){
 //	vector<unique_ptr<Fahrzeug>> vecFahrzeuge;
-//
 //	 vecFahrzeuge.push_back(make_unique<Fahrzeug>("fahrzeug1", 30.0));
 //	 vecFahrzeuge.push_back(make_unique<PKW>("audi", 240.0, 8.0));
 //	 vecFahrzeuge.push_back(make_unique<Fahrrad>("fahrrad1", 14.0));
