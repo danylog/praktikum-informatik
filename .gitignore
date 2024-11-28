@@ -1,2 +1,5 @@
 /.metadata/
 /.DS_Store
+.cproject
+.project
+/Debug
