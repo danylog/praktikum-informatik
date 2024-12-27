@@ -7,7 +7,7 @@ class Fahrrad : public Fahrzeug {
 public:
     Fahrrad(const std::string& name, const double maxGeschwindigkeit);
     virtual void vSimulieren() override;
-    virtual double dGeschwindigkeit() override;
+    virtual double dGeschwindigkeit()const override;
 };
 
 #endif

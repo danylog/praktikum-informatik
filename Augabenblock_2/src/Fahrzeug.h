@@ -3,12 +3,10 @@
 
 #include <string>
 extern double dGlobaleZeit;
-class Fahrzeug {
+
+#include "Simulationsobjekt.h"
+class Fahrzeug : public Simulationsobjekt{
 public:
-    Fahrzeug(); //default
-
-    Fahrzeug(const std::string& name); // nur mit name
-
     Fahrzeug(const std::string& name, const double maxGeschwindigkeit); //name und max geschw
 
     Fahrzeug(const Fahrzeug&) = delete; // copy-construktor verboten
@@ -24,31 +22,25 @@ public:
         return *this;
     }
 
-    virtual void vAusgeben(std::ostream& os);
+    void vAusgeben(std::ostream& os) const override;
     virtual void vSimulieren();
     virtual double dTanken( double dMenge = std::numeric_limits<double>::infinity());
 
 
 
-    const std::string& sName() const { return p_sName; }						//GETTERS
-    const int iID() const { return p_iID; }
+
     const double dMaxGeschwindigkeit() const { return p_dMaxGeschwindigkeit; }
-    virtual double dGeschwindigkeit() {return p_dMaxGeschwindigkeit;}
+    virtual double dGeschwindigkeit() const {return p_dMaxGeschwindigkeit;}
 
 
     static void vKopf();
 
-private:
-    const int p_iID;
-    static int p_iMaxID;
-
 // //   const double p_dGesamtZeit;
 protected:
-    std::string p_sName;
+
     double p_dMaxGeschwindigkeit;
     double p_dGesamtStrecke = 0.0;
-    double p_dGesamtZeit = 0.0;
-    double p_dZeit = 0.0;
+
 
 friend std::ostream& operator<<(std::ostream& os, Fahrzeug& f);
 

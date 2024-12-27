@@ -14,7 +14,7 @@ Fahrzeug(name, maxGeschwindigkeit),
 
 }
 
-void PKW::vAusgeben(std::ostream& os) {
+void PKW::vAusgeben(std::ostream& os) const{
     Fahrzeug::vAusgeben(os);
     std::cout << std::fixed << std::setprecision(2)
               << std::setw(10) << p_dVerbrauch << " "
@@ -38,7 +38,7 @@ double PKW::dTanken(double menge){
     return dGetankt;
 }
 
-double PKW::dGeschwindigkeit(){
+double PKW::dGeschwindigkeit() const{
     return (p_dTankinhalt > 0) ? p_dMaxGeschwindigkeit : 0; // Return speed based on tank state
 }
 

@@ -1,33 +1,26 @@
 #include "Fahrzeug.h"
 #include "PKW.h"
 #include "Fahrrad.h"
+#include "Simulationsobjekt.h"
 
 #include <iostream>
 #include <iomanip>
 
 
-int Fahrzeug::p_iMaxID = 0;
 
 //double dGlobaleZeit = 0.0;
 
-Fahrzeug::Fahrzeug() : p_iID(++p_iMaxID), p_sName(""), p_dMaxGeschwindigkeit(0.0) {			//CONSTRUCTORS
-    std::cout << "Default Fahrzeug erstellt mit ID " << p_iID << std::endl;
-}
 
-Fahrzeug::Fahrzeug(const std::string& name) :  p_iID(++p_iMaxID), p_sName(name), p_dMaxGeschwindigkeit(0.0) {
-    std::cout << "Fahrzeug " << p_sName << " erstellt mit ID " << p_iID << std::endl;
-}
-
-Fahrzeug::Fahrzeug(const std::string& name, const double maxGeschwindigkeit):  p_iID(++p_iMaxID),p_sName(name), p_dMaxGeschwindigkeit((maxGeschwindigkeit > 0) ? maxGeschwindigkeit : 0) {
+Fahrzeug::Fahrzeug(const std::string& name, const double maxGeschwindigkeit):  Simulationsobjekt(name), p_dMaxGeschwindigkeit((maxGeschwindigkeit > 0) ? maxGeschwindigkeit : 0) {
 
 }
 
 Fahrzeug::~Fahrzeug() {
-    std::cout << "Fahrzeug mit Name: " << p_sName << " und ID: " << p_iID << " geloescht" << std::endl;
+    std::cout << "Fahrzeug mit Name: " << p_sName << " geloescht" << std::endl;
 }
 
-void Fahrzeug::vAusgeben(std::ostream& os){																	//FUNKTIONEN
-os << std::setw(4) << p_iID << " "
+void Fahrzeug::vAusgeben(std::ostream& os) const{																	//FUNKTIONEN
+os << std::setw(4) << " "
 		<< std::setw(9) << std::setiosflags(std::ios::left)<< p_sName << std::resetiosflags(std::ios::left)<< " "
 		<< std::setw(19)  << std::setiosflags(std::ios::fixed) << std::setprecision(2) << p_dMaxGeschwindigkeit << " "
 		<< std::setw(15) << std::setprecision(2) << dGeschwindigkeit() << " "
