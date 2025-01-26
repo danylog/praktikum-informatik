@@ -1,21 +1,15 @@
 //============================================================================
-// Name        : Aufgabenblock_2
+// Name        : helloworld.cpp
 // Author      : Danylo Galytskyy
 // Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include "Fahrzeug.h"
-#include "Fahrrad.h"
-#include "PKW.h"
-
 #include <iostream>
-#include <iomanip>
-#include <memory>
-#include <vector>
+using namespace std;
 
-double dGlobaleZeit = 0.0;
-
-int main(){
-	std::cout << "hello world";
+int main() {
+	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 	return 0;
 }

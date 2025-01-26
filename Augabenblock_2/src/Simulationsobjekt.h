@@ -2,31 +2,40 @@
 #define SIMULATIONSOBJEKT_H
 
 #include <string>
+#include <ostream>
 
-class Simulationsobjekt{
+
+class Simulationsobjekt {
 public:
-	Simulationsobjekt();
-	Simulationsobjekt(const std::string& name); // nur mit name
-	virtual ~Simulationsobjekt();
+    // Default constructor
+    Simulationsobjekt();
 
-	bool operator==(const Simulationsobjekt& other) const {
-	    return p_iID == other.p_iID;
-	}
+    // Constructor with name
+    Simulationsobjekt(const std::string& name);
 
-	virtual void vAusgeben(std::ostream& os) const;
+    // Virtual destructor
+    virtual ~Simulationsobjekt();
 
-    const std::string& sName() const { return p_sName; }						//GETTERS
-    const int iID() const { return p_iID; }
+    // Comparison operator
+    bool operator==(const Simulationsobjekt& other) const {
+        return p_iID == other.p_iID;
+    }
+
+    // Virtual function to output object information
+    virtual void vAusgeben(std::ostream& os) const;
+
+    // Getters
+    const std::string& sName() const { return p_sName; }
+    int iID() const { return p_iID; }
 
 private:
-    const int p_iID;
-    static int p_iMaxID;
+    const int p_iID;  // Unique ID for each object
+    static int p_iMaxID;  // Tracks the maximum ID assigned
 
 protected:
-    std::string p_sName;
-    double p_dGesamtZeit = 0.0;
-    double p_dZeit = 0.0;
-
+    std::string p_sName;  // Name of the object
+    double p_dGesamtZeit = 0.0;  // Total simulation time
+    double p_dZeit = 0.0;  // Local simulation time
 };
 
 #endif

@@ -2,7 +2,10 @@
 #include "PKW.h"
 #include "Fahrrad.h"
 #include "Simulationsobjekt.h"
-
+#include "Weg.h"
+#include "Verhalten.h"
+#include "Fahren.h"
+#include "Parken.h"
 #include <iostream>
 #include <iomanip>
 
@@ -35,12 +38,28 @@ double Fahrzeug::dTanken(double menge) {
 void Fahrzeug::vSimulieren() {
     if (p_dZeit < dGlobaleZeit) {
         double dZeitschritt = dGlobaleZeit - p_dZeit;
-        double dGefahreneStrecke = dGeschwindigkeit() * dZeitschritt;
 
-        p_dGesamtStrecke += dGefahreneStrecke;
+        // Use Verhalten to calculate the distance
+        if (p_pVerhalten) {
+            double dGefahreneStrecke = p_pVerhalten->dStrecke(*this, dZeitschritt);
+            p_dGesamtStrecke += dGefahreneStrecke;
+            p_dAbschnittStrecke += dGefahreneStrecke;
+        }
+
         p_dGesamtZeit += dZeitschritt;
         p_dZeit = dGlobaleZeit;
     }
+}
+
+void Fahrzeug::vNeueStrecke(Weg& weg, bool bFahren) {
+    // Create the correct behavior based on the flag bFahren (true for "Fahren", false for "Parken")
+    if (bFahren) {
+        p_pVerhalten = std::make_unique<Fahren>(weg);
+    } else {
+        p_pVerhalten = std::make_unique<Parken>(weg);
+    }
+
+    p_dAbschnittStrecke = 0.0; // Reset the section-specific distance
 }
 
 std::ostream& operator<<(std::ostream& os, Fahrzeug& f) { //'<<' operator (ueberladet)
