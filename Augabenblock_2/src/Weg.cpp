@@ -19,35 +19,56 @@ Weg::Weg(const std::string& name, double laenge, Tempolimit tempolimit)
 
 Weg::~Weg(){}
 
-void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug){
-	fahrzeug->vNeueStrecke(*this);
-	p_pFahrzeuge.push_back(std::move(fahrzeug));
+void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug) {
+    fahrzeug->vNeueStrecke(*this);
+    p_pFahrzeuge.push_back(std::move(fahrzeug));
 }
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug, double startzeit) {
     fahrzeug->vNeueStrecke(*this, startzeit);
-
     p_pFahrzeuge.push_front(std::move(fahrzeug));
 }
 
+std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug& fahrzeug) {
+    for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
+        if (it->get() == &fahrzeug) {
+            std::unique_ptr<Fahrzeug> temp = std::move(*it);
+            p_pFahrzeuge.erase(it);
+            return temp;
+        }
+    }
+    return nullptr;
+}
+
 void Weg::vSimulieren() {
-    auto it = p_pFahrzeuge.begin();
-    while (it != p_pFahrzeuge.end()) {
+    // Make a copy of the list size since it might change during iteration
+    size_t originalSize = p_pFahrzeuge.size();
+    size_t processed = 0;
+
+    for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end() && processed < originalSize;) {
         try {
-            (*it)->vSimulieren();
-            ++it;
+            if (*it) {
+                (*it)->vSimulieren();
+                (*it)->vZeichnen(*this);
+                ++it;
+                ++processed;
+            } else {
+                it = p_pFahrzeuge.erase(it);
+            }
         }
-        catch (Losfahren& ausnahme) {
+        catch (const Losfahren& ausnahme) {
             ausnahme.vBearbeiten();
-            (*it)->vNeueStrecke(*this);  // Convert to driving mode
             ++it;
+            ++processed;
         }
-        catch (Streckenende& ausnahme) {
+        catch (const Streckenende& ausnahme) {
             ausnahme.vBearbeiten();
-            ++it;
+            it = p_pFahrzeuge.erase(it);  // Remove the vehicle here directly
+            // Don't increment processed since we removed an element
         }
     }
 }
+
 
 void Weg::vKopf(std::ostream& os) {
     os << std::setw(5) << "ID"
@@ -86,3 +107,4 @@ std::ostream& operator<<(std::ostream& os, const Weg& weg) {
     weg.vAusgeben(os); // Call the vAusgeben function
     return os; // Return the stream reference
 }
+

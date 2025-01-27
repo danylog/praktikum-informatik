@@ -9,8 +9,7 @@ public:
     Fahren(Weg& weg) : Verhalten(weg) {}
 
     double dStrecke(Fahrzeug& aFzg, double dZeitIntervall) const override {
-        double dMaxStrecke = p_rWeg.getLength() - aFzg.getGesamtStrecke();
-        std::cout<< dMaxStrecke << std::endl;
+        double dMaxStrecke = p_rWeg.getLength() - aFzg.getAbschnittStrecke();  // Changed from getGesamtStrecke
         double dFahrbareStrecke = aFzg.dGeschwindigkeit() * dZeitIntervall;
 
         if (dFahrbareStrecke > dMaxStrecke) {

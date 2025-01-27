@@ -43,6 +43,9 @@ public:
     virtual double dGeschwindigkeit() const {return p_dMaxGeschwindigkeit;}
     virtual double getAbschnittStrecke() const { return p_dAbschnittStrecke; }
     virtual double getGesamtStrecke() const {return p_dGesamtStrecke;}
+    virtual void vZeichnen(const Weg& weg) const = 0;
+
+
     std::string getName() const { return p_sName;}
     const Verhalten* getVerhalten() const {
         return p_pVerhalten.get();

@@ -12,63 +12,63 @@
 double dGlobaleZeit = 0.0;
 
 
-void vAufgabe_5_5(){
-    Weg autobahn("A1", 1000.0, Tempolimit::Autobahn);
-
-    auto bmw = std::make_unique<Fahrzeug>("BMW", 160.0);
-    auto vw = std::make_unique<Fahrzeug>("VW", 130.0);
-    auto audi = std::make_unique<Fahrzeug>("AUDI", 140.0);
-
-    autobahn.vAnnahme(std::move(bmw));
-    autobahn.vAnnahme(std::move(vw), 1.0);
-    autobahn.vAnnahme(std::move(audi), 2.0);
-
-    double dTakt = 0.5;
-    for(int i = 0; i < 20; ++i) {
-        dGlobaleZeit += dTakt;
-        std::cout << "\nTime step " << i+1 << " (t = " << dGlobaleZeit << "h):" << std::endl;
-        autobahn.vSimulieren();
-        autobahn.vAusgeben(std::cout);
-
-        std::cout << std::endl;
-    }
-
-
-
-}
-
-void vAufgabe_5(){
-
-    Weg autobahn("A1", 1000.0, Tempolimit::Autobahn);
-
-    // Create vehicles
-    auto bmw = std::make_unique<Fahrzeug>("BMW", 160.0);
-    auto vw = std::make_unique<Fahrzeug>("VW", 130.0);
-    auto audi = std::make_unique<Fahrzeug>("AUDI", 140.0);
-
-    // Add vehicles to the road - some driving, some parking
-    autobahn.vAnnahme(std::move(bmw));  // Driving
-    autobahn.vAnnahme(std::move(vw), 1.0);  // Parked, starts at t=1.0h
-    autobahn.vAnnahme(std::move(audi), 2.0);  // Parked, starts at t=2.0h
-
-    std::cout << "\nInitial state (t = " << dGlobaleZeit << "):" << std::endl;
-    Weg::vKopf(std::cout);
-    autobahn.vAusgeben(std::cout);
-    std::cout << std::endl;
-
-    // Simulate for several time steps
-    double dTakt = 0.5; // Time step in hours (30 minutes)
-    for(int i = 0; i < 5; ++i) {
-        dGlobaleZeit += dTakt;
-        std::cout << "\nTime step " << i+1 << " (t = " << dGlobaleZeit << "h):" << std::endl;
-
-        autobahn.vSimulieren();
-
-        Weg::vKopf(std::cout);
-        autobahn.vAusgeben(std::cout);
-        std::cout << std::endl;
-    }
-}
+//void vAufgabe_5_5(){
+//    Weg autobahn("A1", 1000.0, Tempolimit::Autobahn);
+//
+//    auto bmw = std::make_unique<PKW>("BMW", 160.0);
+//    auto vw = std::make_unique<PKW>("VW", 130.0);
+//    auto audi = std::make_unique<PKW>("AUDI", 140.0);
+//
+//    autobahn.vAnnahme(std::move(bmw));
+//    autobahn.vAnnahme(std::move(vw), 0.2);
+//    autobahn.vAnnahme(std::move(audi), 2.0);
+//
+//    double dTakt = 0.5;
+//    for(int i = 0; i < 20; ++i) {
+//        dGlobaleZeit += dTakt;
+//        std::cout << "\nTime step " << i+1 << " (t = " << dGlobaleZeit << "h):" << std::endl;
+//        autobahn.vSimulieren();
+//        autobahn.vAusgeben(std::cout);
+//
+//        std::cout << std::endl;
+//    }
+//
+//
+//
+//}
+//
+//void vAufgabe_5(){
+//
+//    Weg autobahn("A1", 1000.0, Tempolimit::Autobahn);
+//
+//    // Create vehicles
+//    auto bmw = std::make_unique<PKW>("BMW", 160.0);
+//    auto vw = std::make_unique<PKW>("VW", 130.0);
+//    auto audi = std::make_unique<PKW>("AUDI", 140.0);
+//
+//    // Add vehicles to the road - some driving, some parking
+//    autobahn.vAnnahme(std::move(bmw));  // Driving
+//    autobahn.vAnnahme(std::move(vw), 1.0);  // Parked, starts at t=1.0h
+//    autobahn.vAnnahme(std::move(audi), 2.0);  // Parked, starts at t=2.0h
+//
+//    std::cout << "\nInitial state (t = " << dGlobaleZeit << "):" << std::endl;
+//    Weg::vKopf(std::cout);
+//    autobahn.vAusgeben(std::cout);
+//    std::cout << std::endl;
+//
+//    // Simulate for several time steps
+//    double dTakt = 0.5; // Time step in hours (30 minutes)
+//    for(int i = 0; i < 5; ++i) {
+//        dGlobaleZeit += dTakt;
+//        std::cout << "\nTime step " << i+1 << " (t = " << dGlobaleZeit << "h):" << std::endl;
+//
+//        autobahn.vSimulieren();
+//
+//        Weg::vKopf(std::cout);
+//        autobahn.vAusgeben(std::cout);
+//        std::cout << std::endl;
+//    }
+//}
 
 void vAufgabe6(){
 	bInitialisiereGrafik(1100,1100);
@@ -82,9 +82,9 @@ void vAufgabe6(){
 
 
 	    // Create vehicles (PKWs with different max speeds)
-	    auto vw = std::make_unique<PKW>("VW", 130.0, 4.0);        // Max 130 km/h
+	    auto vw = std::make_unique<PKW>("VW", 130.0, 0.1);        // Max 130 km/h
 	    auto porsche = std::make_unique<PKW>("Porsche", 180.0, 0.01, 55.0); // Max 180 km/h
-	    auto bmw = std::make_unique<PKW>("BMW", 160.0, 3.0);      // Max 160 km/h
+	    auto bmw = std::make_unique<PKW>("BMW", 160.0, 0.1);      // Max 160 km/h
 
 	    PKW* vwptr = bmw.get();
 	    // Add vehicles to roads
@@ -92,10 +92,10 @@ void vAufgabe6(){
 	    autobahn.vAnnahme(std::move(porsche));
 	    landstrasse.vAnnahme(std::move(bmw));
 
-	    double dTakt = 1;
-	    for(int i = 0; i < 50; ++i) {
+	    double dTakt = 0.5;
+	    for(int i = 0; i < 1000; ++i) {
 	    	vSetzeZeit(dGlobaleZeit);
-	    	bZeichnePKW(vwptr->getName(), (vwptr->getVerhalten()->getWeg()).getName(), (vwptr->getGesamtStrecke())/((vwptr->getVerhalten()->getWeg()).getLength()), vwptr->dGeschwindigkeit(), vwptr->getTankinhalt());
+
 	        dGlobaleZeit += dTakt;
 	        std::cout << "\nTime step " << i+1 << " (t = " << dGlobaleZeit << "h):" << std::endl;
 
@@ -106,7 +106,7 @@ void vAufgabe6(){
 	        std::cout << "\nAutobahn (No speed limit):" << std::endl;
 	        autobahn.vSimulieren();
 	        autobahn.vAusgeben(std::cout);
-	        vSleep(1000);
+	        vSleep(500);
 	    }
 
 

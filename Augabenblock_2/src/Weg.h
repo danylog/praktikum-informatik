@@ -33,8 +33,9 @@ public:
 	double getLength() const { return p_dLaenge; }
 
 	void vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug);
+	    void vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug, double startzeit);
+	    std::unique_ptr<Fahrzeug> pAbgabe(const Fahrzeug& fahrzeug);
 
-    void vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug, double startzeit);
 
 
     std::string getName() const { return p_sName;}

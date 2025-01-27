@@ -39,11 +39,23 @@ void Fahrzeug::vSimulieren() {
     if (p_dZeit < dGlobaleZeit) {
         double dZeitschritt = dGlobaleZeit - p_dZeit;
 
-        // Use Verhalten to calculate the distance
         if (p_pVerhalten) {
-            double dGefahreneStrecke = p_pVerhalten->dStrecke(*this, dZeitschritt);
-            p_dGesamtStrecke += dGefahreneStrecke;
-            p_dAbschnittStrecke += dGefahreneStrecke;
+            try {
+                double dGefahreneStrecke = p_pVerhalten->dStrecke(*this, dZeitschritt);
+                p_dAbschnittStrecke += dGefahreneStrecke;
+                p_dGesamtStrecke += dGefahreneStrecke;
+            }
+            catch (const Streckenende& e) {
+                // Handle road end exception
+                std::cout << "Streckenende reached for " << p_sName << std::endl;
+                // Additional handling if needed
+            }
+            catch (const Losfahren& e) {
+                // Handle start driving exception
+                std::cout << "Vehicle " << p_sName << " starting to drive" << std::endl;
+                // Convert from Parken to Fahren
+                vNeueStrecke(p_pVerhalten->getWeg());
+            }
         }
 
         p_dGesamtZeit += dZeitschritt;
@@ -53,7 +65,7 @@ void Fahrzeug::vSimulieren() {
 
 void Fahrzeug::vNeueStrecke(Weg& weg) {
     p_dAbschnittStrecke = 0.0;
-
+std::cout << "neuestrecke" << std::endl;
         p_pVerhalten = std::make_unique<Fahren>(weg);
 
 }

@@ -10,7 +10,7 @@ public:
     Fahrausnahme(Fahrzeug& fahrzeug, Weg& weg)
         : p_pFahrzeug(fahrzeug), p_pWeg(weg) {}
     virtual ~Fahrausnahme() = default;
-    virtual void vBearbeiten() = 0;
+    virtual void vBearbeiten() const = 0;  // Removed const since it needs to modify state
 
 protected:
     Fahrzeug& p_pFahrzeug;

@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Verhalten.h"
 #include "Weg.h"
+#include "Simuclient.h"
 
 
 PKW::PKW(const std::string& name, double maxGeschwindigkeit, double verbrauch, double tankvolumen):
@@ -59,19 +60,43 @@ void PKW::vSimulieren() {
     if (p_dTankinhalt > 0.0) {
         double dZeitschritt = dGlobaleZeit - p_dZeit;
 
-        if (dZeitschritt > 0.0) {
-            double dFahrbareStrecke = dGeschwindigkeit() * dZeitschritt;
-            double dMaxStreckeMitTank = (p_dTankinhalt / p_dVerbrauch) * 100.0;
+        if (p_pVerhalten) {
+            // Get the distance we'll drive in this step
+            double dGefahreneStrecke = p_pVerhalten->dStrecke(*this, dZeitschritt);
 
-            double dTatsaechlicheStrecke = std::min(dFahrbareStrecke, dMaxStreckeMitTank);
-            double dVerbrauch = (dTatsaechlicheStrecke / 100.0) * p_dVerbrauch;
+            // Calculate fuel consumption for this distance
+            double dVerbrauch = (dGefahreneStrecke / 100.0) * p_dVerbrauch;
 
-            p_dGesamtStrecke += dTatsaechlicheStrecke;
-            p_dTankinhalt -= dVerbrauch;
-
-            p_dGesamtZeit += dZeitschritt;
-            p_dZeit = dGlobaleZeit;
+            // Only move if we have enough fuel
+            if (dVerbrauch <= p_dTankinhalt) {
+                p_dGesamtStrecke += dGefahreneStrecke;
+                p_dAbschnittStrecke += dGefahreneStrecke;
+                p_dTankinhalt -= dVerbrauch;
+            } else {
+                // Not enough fuel for full distance
+                double dMoeglicheStrecke = (p_dTankinhalt * 100.0) / p_dVerbrauch;
+                p_dGesamtStrecke += dMoeglicheStrecke;
+                p_dAbschnittStrecke += dMoeglicheStrecke;
+                p_dTankinhalt = 0;
+            }
         }
+
+        p_dGesamtZeit += dZeitschritt;
+        p_dZeit = dGlobaleZeit;
     } else {
         std::cout << p_sName << " Hat keinen Stoff und kann nicht bewegen\n";
-    }}
+    }
+}
+
+void PKW::vZeichnen(const Weg& weg) const {
+    double relativePosition = getAbschnittStrecke() / weg.getLength();
+
+    // Call with correct parameters: PKWName, WegName, RelPosition, KmH, Tank
+    bZeichnePKW(
+        p_sName,                    // PKW name
+        weg.getName(),              // Road name
+        relativePosition,           // Relative position
+        dGeschwindigkeit(),         // Current speed in KmH
+        p_dTankinhalt              // Current tank level
+    );
+}

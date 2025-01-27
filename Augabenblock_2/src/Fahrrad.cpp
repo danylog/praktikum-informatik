@@ -1,6 +1,8 @@
 #include "Fahrrad.h"
 #include <iostream>
 #include <cmath>
+#include "SimuClient.h"
+#include "Weg.h"
 
 Fahrrad::Fahrrad(const std::string& name, const double maxGeschwindigkeit)
     : Fahrzeug(name, maxGeschwindigkeit) {}
@@ -28,3 +30,17 @@ double Fahrrad::dGeschwindigkeit() const{
 	}
 
 }
+
+// Fahrrad.cpp
+void Fahrrad::vZeichnen(const Weg& weg) const {
+    double relativePosition = getAbschnittStrecke() / weg.getLength();
+
+    // Call with correct parameters: FahrradName, WegName, RelPosition, KmH
+    bZeichneFahrrad(
+        p_sName,                    // Bicycle name
+        weg.getName(),              // Road name
+        relativePosition,           // Relative position
+        dGeschwindigkeit()          // Current speed in KmH
+    );
+}
+
