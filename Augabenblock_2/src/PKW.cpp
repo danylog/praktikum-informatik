@@ -1,6 +1,8 @@
 #include "PKW.h"
-
+#include "Tempolimit.h"
 #include <iostream>
+#include "Verhalten.h"
+#include "Weg.h"
 
 
 PKW::PKW(const std::string& name, double maxGeschwindigkeit, double verbrauch, double tankvolumen):
@@ -39,7 +41,18 @@ double PKW::dTanken(double menge){
 }
 
 double PKW::dGeschwindigkeit() const{
-    return (p_dTankinhalt > 0) ? p_dMaxGeschwindigkeit : 0; // Return speed based on tank state
+    if(p_dTankinhalt == 0){
+    	return 0;
+    }else{
+        if (!p_pVerhalten) return p_dMaxGeschwindigkeit;
+
+        Weg& weg = p_pVerhalten->getWeg();
+        double tempLimit = weg.getTempolimit();
+
+
+        return std::min(p_dMaxGeschwindigkeit, tempLimit);
+
+    }
 }
 
 void PKW::vSimulieren() {

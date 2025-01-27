@@ -3,7 +3,9 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-
+#include "Fahrausnahme.h"
+#include "Losfahren.h"
+#include "Streckenende.h"
 //std::string& defaultname = "DefaultWeg";
 
 
@@ -18,14 +20,33 @@ Weg::Weg(const std::string& name, double laenge, Tempolimit tempolimit)
 Weg::~Weg(){}
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug){
-	fahrzeug->vNeueStrecke(*this, true);
+	fahrzeug->vNeueStrecke(*this);
 	p_pFahrzeuge.push_back(std::move(fahrzeug));
 }
 
-void Weg::vSimulieren(){
-	for(auto& fahrzeug : p_pFahrzeuge){
-		fahrzeug->vSimulieren();
-	}
+void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug, double startzeit) {
+    fahrzeug->vNeueStrecke(*this, startzeit);
+
+    p_pFahrzeuge.push_front(std::move(fahrzeug));
+}
+
+void Weg::vSimulieren() {
+    auto it = p_pFahrzeuge.begin();
+    while (it != p_pFahrzeuge.end()) {
+        try {
+            (*it)->vSimulieren();
+            ++it;
+        }
+        catch (Losfahren& ausnahme) {
+            ausnahme.vBearbeiten();
+            (*it)->vNeueStrecke(*this);  // Convert to driving mode
+            ++it;
+        }
+        catch (Streckenende& ausnahme) {
+            ausnahme.vBearbeiten();
+            ++it;
+        }
+    }
 }
 
 void Weg::vKopf(std::ostream& os) {
@@ -41,14 +62,23 @@ void Weg::vAusgeben(std::ostream& os) const {
        << " | " << std::setw(10) << sName()
        << " | " << std::setw(10) << std::fixed << std::setprecision(2) << p_dLaenge
        << " | (";
+
     bool first = true;
     for (const auto& fahrzeug : p_pFahrzeuge) {
         if (!first) os << ", ";
         os << fahrzeug->sName();
         first = false;
     }
+    os << ")" << std::endl;
 
-    os << ")";
+    if (!p_pFahrzeuge.empty()) {
+        os << std::setw(30) << " " << "Fahrzeuge:" << std::endl;
+        Fahrzeug::vKopf();
+        for (const auto& fahrzeug : p_pFahrzeuge) {
+            fahrzeug->vAusgeben(os);
+            os << std::endl;
+        }
+    }
 }
 
 

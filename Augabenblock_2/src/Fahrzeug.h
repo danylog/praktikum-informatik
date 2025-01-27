@@ -41,24 +41,31 @@ public:
 
     const double dMaxGeschwindigkeit() const { return p_dMaxGeschwindigkeit; }
     virtual double dGeschwindigkeit() const {return p_dMaxGeschwindigkeit;}
-    double getAbschnittStrecke() const { return p_dAbschnittStrecke; }
-
+    virtual double getAbschnittStrecke() const { return p_dAbschnittStrecke; }
+    virtual double getGesamtStrecke() const {return p_dGesamtStrecke;}
+    std::string getName() const { return p_sName;}
+    const Verhalten* getVerhalten() const {
+        return p_pVerhalten.get();
+    }
 
 
     static void vKopf();
 
 
-    void vNeueStrecke(Weg& weg, bool bFahren);
+    void vNeueStrecke(Weg& weg);
+
+    void vNeueStrecke(Weg& weg, double startzeit);
+
 
 // //   const double p_dGesamtZeit;
 protected:
 
     double p_dMaxGeschwindigkeit;
-    double p_dGesamtStrecke = 0.0;
+    double p_dGesamtStrecke;
     double p_dAbschnittStrecke;
-
-private:
     std::unique_ptr<Verhalten> p_pVerhalten;
+private:
+
 
 friend std::ostream& operator<<(std::ostream& os, Fahrzeug& f);
 

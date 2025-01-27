@@ -51,15 +51,18 @@ void Fahrzeug::vSimulieren() {
     }
 }
 
-void Fahrzeug::vNeueStrecke(Weg& weg, bool bFahren) {
-    // Create the correct behavior based on the flag bFahren (true for "Fahren", false for "Parken")
-    if (bFahren) {
-        p_pVerhalten = std::make_unique<Fahren>(weg);
-    } else {
-        p_pVerhalten = std::make_unique<Parken>(weg);
-    }
+void Fahrzeug::vNeueStrecke(Weg& weg) {
+    p_dAbschnittStrecke = 0.0;
 
-    p_dAbschnittStrecke = 0.0; // Reset the section-specific distance
+        p_pVerhalten = std::make_unique<Fahren>(weg);
+
+}
+
+void Fahrzeug::vNeueStrecke(Weg& weg, double startzeit) {
+    p_dAbschnittStrecke = 0.0;
+
+        p_pVerhalten = std::make_unique<Parken>(weg, startzeit);
+
 }
 
 std::ostream& operator<<(std::ostream& os, Fahrzeug& f) { //'<<' operator (ueberladet)

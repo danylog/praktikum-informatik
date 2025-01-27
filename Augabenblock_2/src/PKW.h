@@ -17,6 +17,7 @@ public:
 	    virtual double dTanken(double dMenge = std::numeric_limits<double>::infinity()) override;
 	    virtual void vSimulieren() override;
 	    virtual double dGeschwindigkeit() const override;
+	    double getTankinhalt() const {return p_dTankinhalt;}
 private:
     const double p_dVerbrauch;
     const double p_dTankvolumen;
