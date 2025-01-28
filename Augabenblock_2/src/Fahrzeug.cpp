@@ -36,29 +36,15 @@ double Fahrzeug::dTanken(double menge) {
 }
 
 void Fahrzeug::vSimulieren() {
-    if (p_dZeit < dGlobaleZeit) {
-        double dZeitschritt = dGlobaleZeit - p_dZeit;
+    // Calculate time difference since last update
+    double dDeltaTime = dGlobaleZeit - p_dZeit;
 
-        if (p_pVerhalten) {
-            try {
-                double dGefahreneStrecke = p_pVerhalten->dStrecke(*this, dZeitschritt);
-                p_dAbschnittStrecke += dGefahreneStrecke;
-                p_dGesamtStrecke += dGefahreneStrecke;
-            }
-            catch (const Streckenende& e) {
-                // Handle road end exception
-                std::cout << "Streckenende reached for " << p_sName << std::endl;
-                // Additional handling if needed
-            }
-            catch (const Losfahren& e) {
-                // Handle start driving exception
-                std::cout << "Vehicle " << p_sName << " starting to drive" << std::endl;
-                // Convert from Parken to Fahren
-                vNeueStrecke(p_pVerhalten->getWeg());
-            }
-        }
+    if (dDeltaTime > 0) {
+        // Update position
+        double dNewPosition = p_dGesamtStrecke + dDeltaTime * p_dMaxGeschwindigkeit;
+        p_dGesamtStrecke = dNewPosition;
 
-        p_dGesamtZeit += dZeitschritt;
+        // Update last simulation time
         p_dZeit = dGlobaleZeit;
     }
 }

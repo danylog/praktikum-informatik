@@ -19,56 +19,84 @@ Weg::Weg(const std::string& name, double laenge, Tempolimit tempolimit)
 
 Weg::~Weg(){}
 
+// In Weg.cpp
+void Weg::vSimulieren() {
+    // First process any pending changes from previous simulation step
+    p_pFahrzeuge.vAktualisieren();
+
+    // Create a temporary list of vehicles to be removed
+    std::vector<std::list<std::unique_ptr<Fahrzeug>>::iterator> toRemove;
+
+    // Simulate each vehicle
+    for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
+        try {
+            // Get reference to the unique_ptr
+            auto& fahrzeug = *it;
+            if (fahrzeug) {
+                // Set the current road for the vehicle
+                fahrzeug->vSetzeWeg(*this);
+                // Simulate the vehicle
+                fahrzeug->vSimulieren();
+                // Draw the vehicle
+                fahrzeug->vZeichnen(*this);
+            }
+        }
+        catch (const Streckenende& ausnahme) {
+            // Mark for removal but don't remove during iteration
+            toRemove.push_back(it);
+            ausnahme.vBearbeiten();
+        }
+    }
+
+    // Remove vehicles that have reached the end
+    for (const auto& it : toRemove) {
+        p_pFahrzeuge.erase(it);
+    }
+
+    // Process all pending changes after simulation
+    p_pFahrzeuge.vAktualisieren();
+}
+
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug) {
-    fahrzeug->vNeueStrecke(*this);
+    // Add moving vehicle at the back
     p_pFahrzeuge.push_back(std::move(fahrzeug));
+    p_pFahrzeuge.vAktualisieren();
 }
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug, double startzeit) {
-    fahrzeug->vNeueStrecke(*this, startzeit);
+    // Add parked vehicle at the front
     p_pFahrzeuge.push_front(std::move(fahrzeug));
+    p_pFahrzeuge.vAktualisieren();
 }
 
 std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug& fahrzeug) {
+    std::unique_ptr<Fahrzeug> result = nullptr;
+
     for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
         if (it->get() == &fahrzeug) {
-            std::unique_ptr<Fahrzeug> temp = std::move(*it);
+            // Transfer ownership to result
+            result = std::move(*it);
+            // Mark for removal from list
             p_pFahrzeuge.erase(it);
-            return temp;
+            break;
         }
     }
-    return nullptr;
+
+    // Process the removal
+    p_pFahrzeuge.vAktualisieren();
+    return result;
 }
 
-void Weg::vSimulieren() {
-    // Make a copy of the list size since it might change during iteration
-    size_t originalSize = p_pFahrzeuge.size();
-    size_t processed = 0;
+void Weg::vAusgeben(std::ostream& out) const {
+    Simulationsobjekt::vAusgeben(out);
+    out << std::setw(20) << p_sName
+        << std::setw(20) << p_dLaenge << std::endl;
 
-    for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end() && processed < originalSize;) {
-        try {
-            if (*it) {
-                (*it)->vSimulieren();
-                (*it)->vZeichnen(*this);
-                ++it;
-                ++processed;
-            } else {
-                it = p_pFahrzeuge.erase(it);
-            }
-        }
-        catch (const Losfahren& ausnahme) {
-            ausnahme.vBearbeiten();
-            ++it;
-            ++processed;
-        }
-        catch (const Streckenende& ausnahme) {
-            ausnahme.vBearbeiten();
-            it = p_pFahrzeuge.erase(it);  // Remove the vehicle here directly
-            // Don't increment processed since we removed an element
-        }
+    // List all vehicles on this road
+    for (const auto& fahrzeug : p_pFahrzeuge) {
+        out << *fahrzeug << std::endl;
     }
 }
-
 
 void Weg::vKopf(std::ostream& os) {
     os << std::setw(5) << "ID"
@@ -78,29 +106,7 @@ void Weg::vKopf(std::ostream& os) {
        << std::string(50, '-') << "\n"; // @suppress("Symbol is not resolved")
 }
 
-void Weg::vAusgeben(std::ostream& os) const {
-    os << std::setw(5) << iID()
-       << " | " << std::setw(10) << sName()
-       << " | " << std::setw(10) << std::fixed << std::setprecision(2) << p_dLaenge
-       << " | (";
 
-    bool first = true;
-    for (const auto& fahrzeug : p_pFahrzeuge) {
-        if (!first) os << ", ";
-        os << fahrzeug->sName();
-        first = false;
-    }
-    os << ")" << std::endl;
-
-    if (!p_pFahrzeuge.empty()) {
-        os << std::setw(30) << " " << "Fahrzeuge:" << std::endl;
-        Fahrzeug::vKopf();
-        for (const auto& fahrzeug : p_pFahrzeuge) {
-            fahrzeug->vAusgeben(os);
-            os << std::endl;
-        }
-    }
-}
 
 
 std::ostream& operator<<(std::ostream& os, const Weg& weg) {

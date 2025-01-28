@@ -8,6 +8,9 @@
 #include <string>
 #include "Simulationsobjekt.h"
 #include "Tempolimit.h"
+#include "vertagt_liste.h"
+
+
 
 class Fahrzeug;
 
@@ -47,7 +50,7 @@ protected:
 
 private:
 	const double p_dLaenge;
-	std::list<std::unique_ptr<Fahrzeug>> p_pFahrzeuge;
+    vertagt::VListe<std::unique_ptr<Fahrzeug>> p_pFahrzeuge;
 	Tempolimit p_eTempolimit;
 
 };

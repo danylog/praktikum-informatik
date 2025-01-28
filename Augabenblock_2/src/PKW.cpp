@@ -56,35 +56,27 @@ double PKW::dGeschwindigkeit() const{
     }
 }
 
+// In PKW.cpp
 void PKW::vSimulieren() {
-    if (p_dTankinhalt > 0.0) {
-        double dZeitschritt = dGlobaleZeit - p_dZeit;
+    double dDeltaTime = dGlobaleZeit - p_dZeit;
 
-        if (p_pVerhalten) {
-            // Get the distance we'll drive in this step
-            double dGefahreneStrecke = p_pVerhalten->dStrecke(*this, dZeitschritt);
+    if (dDeltaTime > 0) {
+        // Consider fuel consumption
+        if (p_dTankinhalt > 0) {
+            // Calculate new position with actual speed
+            double dActualSpeed = p_dMaxGeschwindigkeit;  // Can be modified by tank status
+            double dDistance = dDeltaTime * dActualSpeed;
 
-            // Calculate fuel consumption for this distance
-            double dVerbrauch = (dGefahreneStrecke / 100.0) * p_dVerbrauch;
+            // Update total distance
+            p_dGesamtStrecke += dDistance;
 
-            // Only move if we have enough fuel
-            if (dVerbrauch <= p_dTankinhalt) {
-                p_dGesamtStrecke += dGefahreneStrecke;
-                p_dAbschnittStrecke += dGefahreneStrecke;
-                p_dTankinhalt -= dVerbrauch;
-            } else {
-                // Not enough fuel for full distance
-                double dMoeglicheStrecke = (p_dTankinhalt * 100.0) / p_dVerbrauch;
-                p_dGesamtStrecke += dMoeglicheStrecke;
-                p_dAbschnittStrecke += dMoeglicheStrecke;
-                p_dTankinhalt = 0;
-            }
+            // Update fuel
+            double dVerbrauch = dDistance * p_dVerbrauch / 100.0;
+            p_dTankinhalt = std::max(0.0, p_dTankinhalt - dVerbrauch);
         }
 
-        p_dGesamtZeit += dZeitschritt;
+        // Update last simulation time
         p_dZeit = dGlobaleZeit;
-    } else {
-        std::cout << p_sName << " Hat keinen Stoff und kann nicht bewegen\n";
     }
 }
 

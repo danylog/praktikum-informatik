@@ -19,7 +19,7 @@ class Fahrzeug : public Simulationsobjekt{
 public:
     Fahrzeug(const std::string& name, const double maxGeschwindigkeit); //name und max geschw
 
-    Fahrzeug(const Fahrzeug&) = delete; // copy-construktor verboten
+    //Fahrzeug(const Fahrzeug&) = delete; // copy-construktor verboten
 
     virtual ~Fahrzeug();
 
@@ -44,6 +44,7 @@ public:
     virtual double getAbschnittStrecke() const { return p_dAbschnittStrecke; }
     virtual double getGesamtStrecke() const {return p_dGesamtStrecke;}
     virtual void vZeichnen(const Weg& weg) const = 0;
+    void vSetzeWeg(Weg& weg) { p_pWeg = &weg; }
 
 
     std::string getName() const { return p_sName;}
@@ -62,6 +63,7 @@ public:
 
 // //   const double p_dGesamtZeit;
 protected:
+    Weg* p_pWeg = nullptr;  // Pointer to current road
 
     double p_dMaxGeschwindigkeit;
     double p_dGesamtStrecke;
