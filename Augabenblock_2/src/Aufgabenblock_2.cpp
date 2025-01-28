@@ -206,6 +206,9 @@ void vAufgabe7() {
 
 
 void vAufgabe_8() {
+    // Initialize graphics
+    bInitialisiereGrafik(1100, 1100);
+
     // Create intersections with different gas station volumes
     auto kreuzung1 = std::make_shared<Kreuzung>("Kreuzung1", 1000);  // Large gas station
     auto kreuzung2 = std::make_shared<Kreuzung>("Kreuzung2");        // No gas station
@@ -217,6 +220,18 @@ void vAufgabe_8() {
     Kreuzung::vVerbinde("W23", "W32", 150, kreuzung2, kreuzung3, Tempolimit::Innerorts);
     Kreuzung::vVerbinde("W34", "W43", 80,  kreuzung3, kreuzung4, Tempolimit::Autobahn);
     Kreuzung::vVerbinde("W41", "W14", 120, kreuzung4, kreuzung1, Tempolimit::Landstrasse);
+
+    // Coordinates for drawing roads (example layout)
+    int coords_12[] = {100, 100, 200, 100};
+    int coords_23[] = {200, 100, 300, 200};
+    int coords_34[] = {300, 200, 400, 200};
+    int coords_41[] = {400, 200, 100, 300};
+
+    // Draw roads
+    bZeichneStrasse("W12", "W21", 100, 2, coords_12);
+    bZeichneStrasse("W23", "W32", 150, 2, coords_23);
+    bZeichneStrasse("W34", "W43", 80, 2, coords_34);
+    bZeichneStrasse("W41", "W14", 120, 2, coords_41);
 
     // Create vehicles with different tank volumes and consumption rates
     auto pkw1 = std::make_unique<PKW>("BMW", 120, 60, 8);     // Speed 120, tank 60, consumption 8
@@ -238,6 +253,9 @@ void vAufgabe_8() {
         std::cout << "\n\nZeit: " << time << " Stunden\n";
         std::cout << "==============================\n";
 
+        // Set the global time for visualization
+        vSetzeZeit(time);
+
         // Simulate all intersections
         kreuzung1->vSimulieren();
         kreuzung2->vSimulieren();
@@ -249,12 +267,17 @@ void vAufgabe_8() {
             std::cout << "\nKreuzung: " << kreuzung->getName() << "\n";
             for (const auto& weg : kreuzung->getWege()) {
                 std::cout << *weg << std::endl;
+                weg->vSimulieren();  // Visualize vehicles on the road
             }
         }
 
         // Increment global time
         dGlobaleZeit += 0.25;
+        vSleep(250);  // Add delay for visualization
     }
+
+    // End graphics
+    vBeendeGrafik();
 }
 int main() {
 	//vAufgabe5();

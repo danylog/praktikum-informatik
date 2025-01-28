@@ -20,7 +20,7 @@ public:
     // Abstract method for describing the behavior
     virtual std::string sBeschreibung() const = 0;
 
-    Weg& getWeg() const { return p_rWeg; }
+    const Weg& getWeg() const { return p_rWeg; }
 
 protected:
     Weg& p_rWeg;  // Reference to Weg to access the road's properties

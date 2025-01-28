@@ -112,77 +112,9 @@ void Weg::vKopf(std::ostream& os) {
        << std::string(50, '-') << "\n"; // @suppress("Symbol is not resolved")
 }
 
-std::shared_ptr<Weg> Weg::getRandomNextWeg() const {
-    if (!p_pZielKreuzung || p_pZielKreuzung->getWege().empty()) {
-        return nullptr;
-    }
 
-    // Create random number generator
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
 
-    // Get list of outgoing roads from target intersection
-    const auto& wege = p_pZielKreuzung->getWege();
 
-    // Create distribution for the size of the roads list
-    std::uniform_int_distribution<> dis(0, wege.size() - 1);
-
-    // Get random index
-    auto it = wege.begin();
-    std::advance(it, dis(gen));
-
-    return *it;
-}
-
-void vAufgabe_8() {
-    // Create intersections with different gas station volumes
-    auto kreuzung1 = std::make_shared<Kreuzung>("Kreuzung1", 1000);  // Large gas station
-    auto kreuzung2 = std::make_shared<Kreuzung>("Kreuzung2");        // No gas station
-    auto kreuzung3 = std::make_shared<Kreuzung>("Kreuzung3", 500);   // Medium gas station
-    auto kreuzung4 = std::make_shared<Kreuzung>("Kreuzung4", 300);   // Small gas station
-
-    // Connect intersections with roads
-    Kreuzung::vVerbinde("W12", "W21", 100, kreuzung1, kreuzung2, Tempolimit::Landstrasse);
-    Kreuzung::vVerbinde("W23", "W32", 150, kreuzung2, kreuzung3, Tempolimit::Innerorts);
-    Kreuzung::vVerbinde("W34", "W43", 80,  kreuzung3, kreuzung4, Tempolimit::Autobahn);
-    Kreuzung::vVerbinde("W41", "W14", 120, kreuzung4, kreuzung1, Tempolimit::Landstrasse);
-
-    // Create vehicles with different tank volumes
-    auto pkw1 = std::make_unique<PKW>("BMW", 120, 60);    // Speed 120, tank 60
-    auto pkw2 = std::make_unique<PKW>("Audi", 150, 55);   // Speed 150, tank 55
-    auto pkw3 = std::make_unique<PKW>("VW", 100, 40);     // Speed 100, tank 40
-    auto fahrrad = std::make_unique<Fahrrad>("Rad1", 30); // Speed 30
-
-    // Get first road from Kreuzung1 to start vehicles
-    auto startWeg = kreuzung1->getWege().front();
-
-    // Start vehicles at different times
-    startWeg->vAnnahme(std::move(pkw1));
-    startWeg->vAnnahme(std::move(pkw2), 2);  // Starts after 2 time units
-    startWeg->vAnnahme(std::move(pkw3), 4);  // Starts after 4 time units
-    startWeg->vAnnahme(std::move(fahrrad));
-
-    // Simulation loop
-    for (double time = 0; time < 24; time += 0.25) {
-        std::cout << "\n\nZeit: " << time << " Stunden\n";
-        std::cout << "==============================\n";
-
-        // Simulate all intersections
-        kreuzung1->vSimulieren();
-        kreuzung2->vSimulieren();
-        kreuzung3->vSimulieren();
-        kreuzung4->vSimulieren();
-
-        // Print gas station status
-        std::cout << "\nTankstellen-Status:\n";
-        std::cout << "Kreuzung1: " << kreuzung1->getTankstellenInhalt() << " L\n";
-        std::cout << "Kreuzung3: " << kreuzung3->getTankstellenInhalt() << " L\n";
-        std::cout << "Kreuzung4: " << kreuzung4->getTankstellenInhalt() << " L\n";
-
-        // Increment global time
-        dGlobaleZeit += 0.25;
-    }
-}
 
 
 Weg* Weg::getRandomNextWeg() const {

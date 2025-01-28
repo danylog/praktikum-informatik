@@ -48,7 +48,7 @@ double PKW::dGeschwindigkeit() const{
     }else{
         if (!p_pVerhalten) return p_dMaxGeschwindigkeit;
 
-        Weg& weg = p_pVerhalten->getWeg();
+        const Weg& weg = p_pVerhalten->getWeg();
         double tempLimit = weg.getTempolimit();
 
 
@@ -85,17 +85,31 @@ void PKW::vSimulieren() {
 
 // In PKW class
 void PKW::vKreuzungErreicht() {
-    // When reaching a Kreuzung
+    // Get a reference to the road
+    const Weg& weg = p_pVerhalten->getWeg();
+
+    // Get the target intersection
+    if (auto zielKreuzung = weg.getZielKreuzung()) {
+        double tankinhalt = getTankinhalt();  // Use your existing getter
+        if (tankinhalt < getTankvolumen()) {  // Use your existing getter
+            double benoetigteMenge = getTankvolumen() - tankinhalt;
+            double getankteMenge = zielKreuzung->dTanken(benoetigteMenge);
+            dTanken(getankteMenge);
+        }
+    }
+}
+
+void PKW::vZeichnen(const Weg& weg) const {
+    // Implementation for drawing the PKW on the road
 
 
-    auto weg = p_pVerhalten->getWeg();
-            if (auto kreuzung = weg.getZielKreuzung()) {
-                double tankvolumen = p_dTankinhalt;
-                if (tankvolumen < p_dTankvolumen) {
-                    double benoetigteMenge = p_dTankvolumen - tankvolumen;
-                    double getankteMenge = kreuzung->dTanken(benoetigteMenge);
-                    dTanken(getankteMenge);
-                }
-            }
+    	double relativePosition = p_dAbschnittStrecke / weg.getLength();
 
+
+    // Draw the PKW using the SimuClient functions
+    bZeichnePKW(getName(),  // vehicle name
+                weg.getName(),  // road name
+                relativePosition,  // relative position on the road (0.0 to 1.0)
+                dGeschwindigkeit(),  // current speed
+                getTankinhalt());  // current fuel level
 }
