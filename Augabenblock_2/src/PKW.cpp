@@ -58,25 +58,28 @@ double PKW::dGeschwindigkeit() const{
 
 // In PKW.cpp
 void PKW::vSimulieren() {
-    double dDeltaTime = dGlobaleZeit - p_dZeit;
+    if (!p_pVerhalten) return;
 
-    if (dDeltaTime > 0) {
-        // Consider fuel consumption
-        if (p_dTankinhalt > 0) {
-            // Calculate new position with actual speed
-            double dActualSpeed = p_dMaxGeschwindigkeit;  // Can be modified by tank status
-            double dDistance = dDeltaTime * dActualSpeed;
+    if (p_dTankinhalt > 0) {
+        double timeDelta = dGlobaleZeit - p_dZeit;
+        if (timeDelta > 0) {
+            double oldDistance = p_dGesamtStrecke;
+            Fahrzeug::vSimulieren();
 
-            // Update total distance
-            p_dGesamtStrecke += dDistance;
+            // Calculate and subtract fuel consumption
+            double distance = p_dGesamtStrecke - oldDistance;
+            double consumption = (distance / 100.0) * p_dVerbrauch;
 
-            // Update fuel
-            double dVerbrauch = dDistance * p_dVerbrauch / 100.0;
-            p_dTankinhalt = std::max(0.0, p_dTankinhalt - dVerbrauch);
+            if (consumption > p_dTankinhalt) {
+                // Not enough fuel for complete distance
+                double possibleDistance = (p_dTankinhalt / p_dVerbrauch) * 100.0;
+                p_dGesamtStrecke = oldDistance + possibleDistance;
+                p_dAbschnittStrecke = oldDistance + possibleDistance;
+                p_dTankinhalt = 0;
+            } else {
+                p_dTankinhalt -= consumption;
+            }
         }
-
-        // Update last simulation time
-        p_dZeit = dGlobaleZeit;
     }
 }
 

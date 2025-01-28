@@ -21,40 +21,19 @@ Weg::~Weg(){}
 
 // In Weg.cpp
 void Weg::vSimulieren() {
-    // First process any pending changes from previous simulation step
-    p_pFahrzeuge.vAktualisieren();
+    p_pFahrzeuge.vAktualisieren();  // Update list first
 
-    // Create a temporary list of vehicles to be removed
-    std::vector<std::list<std::unique_ptr<Fahrzeug>>::iterator> toRemove;
-
-    // Simulate each vehicle
-    for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
+    for(auto& fahrzeug : p_pFahrzeuge) {
         try {
-            // Get reference to the unique_ptr
-            auto& fahrzeug = *it;
-            if (fahrzeug) {
-                // Set the current road for the vehicle
-                fahrzeug->vSetzeWeg(*this);
-                // Simulate the vehicle
-                fahrzeug->vSimulieren();
-                // Draw the vehicle
-                fahrzeug->vZeichnen(*this);
-            }
+            fahrzeug->vSimulieren();
+            fahrzeug->vZeichnen(*this);  // Draw the vehicle after simulation
         }
-        catch (const Streckenende& ausnahme) {
-            // Mark for removal but don't remove during iteration
-            toRemove.push_back(it);
+        catch (Fahrausnahme& ausnahme) {
             ausnahme.vBearbeiten();
         }
     }
 
-    // Remove vehicles that have reached the end
-    for (const auto& it : toRemove) {
-        p_pFahrzeuge.erase(it);
-    }
-
-    // Process all pending changes after simulation
-    p_pFahrzeuge.vAktualisieren();
+    p_pFahrzeuge.vAktualisieren();  // Update list after changes
 }
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug) {

@@ -1,9 +1,6 @@
-// vertagt_aktion.h
-#ifndef VERTAGT_AKTION_H
-#define VERTAGT_AKTION_H
+#pragma once
 
 #include <list>
-#include <memory>
 
 namespace vertagt {
     template <class T>
@@ -17,20 +14,7 @@ namespace vertagt {
         virtual void vAusfuehren() = 0;
     };
 
-    template <class T>
-    class VPushBack : public VAktion<T> {
-    private:
-        T p_objekt;
-
-    public:
-        VPushBack(std::list<T>& liste, T obj)
-            : VAktion<T>(liste), p_objekt(std::move(obj)) {}
-
-        void vAusfuehren() override {
-            this->p_pListe.push_back(std::move(p_objekt));
-        }
-    };
-
+    // Action for push_front
     template <class T>
     class VPushFront : public VAktion<T> {
     private:
@@ -41,23 +25,37 @@ namespace vertagt {
             : VAktion<T>(liste), p_objekt(std::move(obj)) {}
 
         void vAusfuehren() override {
-            this->p_pListe.push_front(std::move(p_objekt));
+            VAktion<T>::p_pListe.push_front(std::move(p_objekt));
         }
     };
 
+    // Action for push_back
+    template <class T>
+    class VPushBack : public VAktion<T> {
+    private:
+        T p_objekt;
+
+    public:
+        VPushBack(std::list<T>& liste, T obj)
+            : VAktion<T>(liste), p_objekt(std::move(obj)) {}
+
+        void vAusfuehren() override {
+            VAktion<T>::p_pListe.push_back(std::move(p_objekt));
+        }
+    };
+
+    // Action for erase
     template <class T>
     class VErase : public VAktion<T> {
     private:
-        typename std::list<T>::iterator p_it;
+        typename std::list<T>::iterator p_iterator;
 
     public:
-        VErase(std::list<T>& liste, typename std::list<T>::iterator it)
-            : VAktion<T>(liste), p_it(it) {}
+        VErase(std::list<T>& liste, typename std::list<T>::iterator iterator)
+            : VAktion<T>(liste), p_iterator(iterator) {}
 
         void vAusfuehren() override {
-            this->p_pListe.erase(p_it);
+            VAktion<T>::p_pListe.erase(p_iterator);
         }
     };
 }
-
-#endif
