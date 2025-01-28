@@ -9,11 +9,12 @@
 #include "Simulationsobjekt.h"
 #include "Tempolimit.h"
 #include "vertagt_liste.h"
+#include <random>
 
 
 
 class Fahrzeug;
-
+class Kreuzung;
 
 
 
@@ -44,6 +45,17 @@ public:
     std::string getName() const { return p_sName;}
 
     friend std::ostream& operator<<(std::ostream& os, const Weg& weg);
+    // Add these new members:
+    Weg* getRandomNextWeg() const;
+
+       // Add getter and setter for ZielKreuzung
+       void setZielKreuzung(std::shared_ptr<Kreuzung> kreuzung) {
+           p_pZielKreuzung = kreuzung;
+       }
+
+       std::shared_ptr<Kreuzung> getZielKreuzung() const {
+           return p_pZielKreuzung.lock();
+       }
 
 
 protected:
@@ -52,6 +64,7 @@ private:
 	const double p_dLaenge;
     vertagt::VListe<std::unique_ptr<Fahrzeug>> p_pFahrzeuge;
 	Tempolimit p_eTempolimit;
+	  std::weak_ptr<Kreuzung> p_pZielKreuzung;
 
 };
 

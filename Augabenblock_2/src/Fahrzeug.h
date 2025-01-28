@@ -34,7 +34,7 @@ public:
 
     void vAusgeben(std::ostream& os) const override;
     virtual void vSimulieren();
-    virtual double dTanken( double dMenge = std::numeric_limits<double>::infinity());
+    virtual double dTanken( double dMenge = std::numeric_limits<double>::infinity()) ;
 
 
 

@@ -4,6 +4,7 @@
 #include "Verhalten.h"
 #include "Weg.h"
 #include "Simuclient.h"
+#include "Kreuzung.h"
 
 
 PKW::PKW(const std::string& name, double maxGeschwindigkeit, double verbrauch, double tankvolumen):
@@ -27,7 +28,7 @@ void PKW::vAusgeben(std::ostream& os) const{
 
 
 
-double PKW::dTanken(double menge){
+double PKW::dTanken(double menge) {
 	double dGetankt = 0.0;
 	if(menge < 0.0) return 0.0;
     if (menge == std::numeric_limits<double>::infinity()) {
@@ -82,15 +83,19 @@ void PKW::vSimulieren() {
     }
 }
 
-void PKW::vZeichnen(const Weg& weg) const {
-    double relativePosition = getAbschnittStrecke() / weg.getLength();
+// In PKW class
+void PKW::vKreuzungErreicht() {
+    // When reaching a Kreuzung
 
-    // Call with correct parameters: PKWName, WegName, RelPosition, KmH, Tank
-    bZeichnePKW(
-        p_sName,                    // PKW name
-        weg.getName(),              // Road name
-        relativePosition,           // Relative position
-        dGeschwindigkeit(),         // Current speed in KmH
-        p_dTankinhalt              // Current tank level
-    );
+
+    auto weg = p_pVerhalten->getWeg();
+            if (auto kreuzung = weg.getZielKreuzung()) {
+                double tankvolumen = p_dTankinhalt;
+                if (tankvolumen < p_dTankvolumen) {
+                    double benoetigteMenge = p_dTankvolumen - tankvolumen;
+                    double getankteMenge = kreuzung->dTanken(benoetigteMenge);
+                    dTanken(getankteMenge);
+                }
+            }
+
 }
