@@ -171,51 +171,36 @@ void vAufgabe_6a() {
     std::cout << std::endl;
 }
 
-void vAufgabe7(){
-	bInitialisiereGrafik(800, 600);    // Initialize graphics with window size
+void vAufgabe7() {
+    bInitialisiereGrafik(800, 600);
 
-	    // Create a road with a valid name for SimuClient
-	    std::shared_ptr<Weg> weg1 = std::make_shared<Weg>("W1", 500.0);  // Use "W1" as defined road name
-	    std::shared_ptr<Weg> weg2 = std::make_shared<Weg>("W2", 500.0);  // Use "W2" as defined road name
+    // Create road with specific coordinates
+    int coords[] = {100, 300, 700, 300};  // Horizontal road
+    Weg weg("Weg1", 600, Tempolimit::Landstrasse);
 
-	    // Draw the roads
-	    int coords[] = {100, 100, 700, 100};  // Example coordinates for W1
-	    bZeichneStrasse("W1", "W2", 500.0, 2, coords);
+    auto vw = std::make_unique<PKW>("VW", 130.0, 0.1);        // Max 130 km/h
+     auto porsche = std::make_unique<PKW>("Porsche", 180.0, 0.01, 55.0); // Max 180 km/h
+    	    auto bmw = std::make_unique<PKW>("BMW", 160.0, 0.1);
 
-	    // Create and add vehicles
-	    weg1->vAnnahme(std::make_unique<PKW>("Audi", 200, 60));
-	    weg1->vAnnahme(std::make_unique<Fahrrad>("BMX", 30));
-	    weg1->vAnnahme(std::make_unique<PKW>("BMW", 150, 40));
+    // Create and add vehicles with reasonable speeds
+    weg.vAnnahme(std::move(vw));  // Slower speed for testing
+    weg.vAnnahme(std::move(porsche), 3.0);
+    weg.vAnnahme(std::move(bmw));  // This one starts at t=3
 
-	    std::cout << "\nInitial state:" << std::endl;
-	    std::cout << *weg1 << std::endl;
+    // Draw the road
+    bZeichneStrasse("Weg1", "Weg1_Ende", 600, 2, coords);
 
-	    // Simulate for several timesteps
-	    for(double dGlobaleZeit = 0; dGlobaleZeit < 5; dGlobaleZeit += 0.5) {
-	        std::cout << "\nSimulation time: " << dGlobaleZeit << std::endl;
+    while (dGlobaleZeit < 15) {  // Run for 15 time units
+        std::cout << "\nTime: " << dGlobaleZeit << std::endl;
 
-	        // Update global time
-	        vSetzeZeit(dGlobaleZeit);
+        vSetzeZeit(dGlobaleZeit);
+        weg.vSimulieren();
 
-	        // Simulate both roads
-	        weg1->vSimulieren();
-	        weg2->vSimulieren();
+        dGlobaleZeit += 0.1;  // Smaller time steps
+        vSleep(100);  // Add delay to see movement
+    }
 
-	        // Output current state
-	        std::cout << *weg1 << std::endl;
-	        std::cout << *weg2 << std::endl;
-
-	        if(dGlobaleZeit == 2.0) {  // Add a new vehicle mid-simulation
-	            std::cout << "\nAdding new vehicle at time " << dGlobaleZeit << std::endl;
-	            weg1->vAnnahme(std::make_unique<PKW>("Mercedes", 180, 55));
-	        }
-
-	        // Small delay to see the simulation
-	        vSleep(1000);
-	    }
-
-	    // Cleanup
-	    vBeendeGrafik();
+    vBeendeGrafik();
 }
 int main() {
 	//vAufgabe5();

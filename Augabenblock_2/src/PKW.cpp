@@ -58,7 +58,6 @@ double PKW::dGeschwindigkeit() const{
 
 // In PKW.cpp
 void PKW::vSimulieren() {
-    if (!p_pVerhalten) return;
 
     if (p_dTankinhalt > 0) {
         double timeDelta = dGlobaleZeit - p_dZeit;

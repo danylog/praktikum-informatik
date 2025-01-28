@@ -35,23 +35,25 @@ double Fahrzeug::dTanken(double menge) {
     return 0.0;
 }
 
+// In Fahrzeug.cpp
 void Fahrzeug::vSimulieren() {
     if (p_dZeit < dGlobaleZeit) {
         double dZeitschritt = dGlobaleZeit - p_dZeit;
 
         if (p_pVerhalten) {
             try {
+                // Use the behavior object to calculate distance
                 double dGefahreneStrecke = p_pVerhalten->dStrecke(*this, dZeitschritt);
                 p_dAbschnittStrecke += dGefahreneStrecke;
                 p_dGesamtStrecke += dGefahreneStrecke;
             }
             catch (const Streckenende& e) {
                 std::cout << "Streckenende reached for " << p_sName << std::endl;
-                throw; // Re-throw to be handled by Weg
+                throw;
             }
             catch (const Losfahren& e) {
                 std::cout << "Vehicle " << p_sName << " starting to drive" << std::endl;
-                throw; // Re-throw to be handled by Weg
+                throw;
             }
         }
 
@@ -61,16 +63,12 @@ void Fahrzeug::vSimulieren() {
 
 void Fahrzeug::vNeueStrecke(Weg& weg) {
     p_dAbschnittStrecke = 0.0;
-std::cout << "neuestrecke" << std::endl;
-        p_pVerhalten = std::make_unique<Fahren>(weg);
-
+    p_pVerhalten = std::make_unique<Fahren>(weg);
 }
 
 void Fahrzeug::vNeueStrecke(Weg& weg, double startzeit) {
     p_dAbschnittStrecke = 0.0;
-
-        p_pVerhalten = std::make_unique<Parken>(weg, startzeit);
-
+    p_pVerhalten = std::make_unique<Parken>(weg, startzeit);
 }
 
 std::ostream& operator<<(std::ostream& os, Fahrzeug& f) { //'<<' operator (ueberladet)

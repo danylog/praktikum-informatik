@@ -21,33 +21,52 @@ Weg::~Weg(){}
 
 // In Weg.cpp
 void Weg::vSimulieren() {
-    p_pFahrzeuge.vAktualisieren();  // Update list first
+    // First process any pending changes
+    p_pFahrzeuge.vAktualisieren();
 
-    for(auto& fahrzeug : p_pFahrzeuge) {
+    // Use iterator-based loop since we might modify the list
+    for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); /*no increment here*/) {
         try {
+            // Get reference to the current vehicle
+            auto& fahrzeug = *it;
             fahrzeug->vSimulieren();
-            fahrzeug->vZeichnen(*this);  // Draw the vehicle after simulation
+            fahrzeug->vZeichnen(*this);
+            // Only increment if no exception was thrown
+            ++it;
         }
-        catch (Fahrausnahme& ausnahme) {
+        catch (const Losfahren& ausnahme) {
             ausnahme.vBearbeiten();
+            // Don't increment iterator - vehicle stays in same position
+            ++it;
+        }
+        catch (const Streckenende& ausnahme) {
+            ausnahme.vBearbeiten();
+            // Mark for deletion using VListe's erase
+            p_pFahrzeuge.erase(it);
+            // Don't increment - erase handles the iterator
+            break;  // Exit loop since list is modified
         }
     }
 
-    p_pFahrzeuge.vAktualisieren();  // Update list after changes
+    // Process all pending changes after simulation
+    p_pFahrzeuge.vAktualisieren();
 }
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug) {
+    // Set up the vehicle's behavior before adding it to the list
+    fahrzeug->vNeueStrecke(*this);  // <-- Add this line
     // Add moving vehicle at the back
     p_pFahrzeuge.push_back(std::move(fahrzeug));
     p_pFahrzeuge.vAktualisieren();
 }
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fahrzeug, double startzeit) {
+    // Set up the vehicle's parking behavior before adding it to the list
+    fahrzeug->vNeueStrecke(*this, startzeit);  // <-- Add this line
     // Add parked vehicle at the front
     p_pFahrzeuge.push_front(std::move(fahrzeug));
     p_pFahrzeuge.vAktualisieren();
 }
-
 std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug& fahrzeug) {
     std::unique_ptr<Fahrzeug> result = nullptr;
 
